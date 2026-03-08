@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- Exclude sensitive data from cloud backup -->
+        <exclude domain="sharedpref" path="FocusLockPrefs.xml"/>
+        <exclude domain="database" />
+    </cloud-backup>
+    <device-transfer>
+        <!-- Include user settings in device transfer -->
+        <include domain="sharedpref" path="."/>
+        <exclude domain="sharedpref" path="FocusLockPrefs.xml"/>
+    </device-transfer>
+</data-extraction-rules>
