@@ -8,7 +8,6 @@
 -keep class com.google.gson.** { *; }
 -dontwarn com.google.gson.**
 -keepattributes Signature
--keepattributes *Annotation*
 
 # Keep generic signature of Gson's TypeToken
 -keep class com.google.gson.reflect.TypeToken { *; }
@@ -18,13 +17,9 @@
 -keep class com.focuslock.model.** { *; }
 -keep class com.focuslock.data.** { *; }
 
-# AndroidX and Material Components
--keep class com.google.android.material.** { *; }
+# AndroidX and Material Components - keep only essentials
 -dontwarn com.google.android.material.**
 -dontnote com.google.android.material.**
-
--keep class androidx.** { *; }
--keep interface androidx.** { *; }
 -dontwarn androidx.**
 
 # Keep native methods

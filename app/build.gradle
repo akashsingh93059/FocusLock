@@ -31,23 +31,39 @@ android {
             // Android will use its default debug signing if not configured above
         }
         release {
-            // For Play Store release, configure your keystore details:
-            // You can set these via environment variables or gradle.properties
-            // Example:
-            // storeFile file(System.getenv("RELEASE_KEYSTORE_PATH") ?: "path/to/keystore.jks")
-            // storePassword System.getenv("RELEASE_KEYSTORE_PASSWORD")
-            // keyAlias System.getenv("RELEASE_KEY_ALIAS")
-            // keyPassword System.getenv("RELEASE_KEY_PASSWORD")
+            // IMPORTANT: Configure your production keystore before building release!
+            // Option 1: Use environment variables (recommended for CI/CD)
+            def keystorePath = System.getenv("RELEASE_KEYSTORE_PATH")
+            def keystorePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
+            def keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+            def keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
             
-            // For now, using debug signing for release builds
-            // Replace this with proper release signing before publishing to Play Store
-            def debugKeystorePath = "${System.getProperty('user.home')}/.android/debug.keystore"
-            def debugKeystoreFile = file(debugKeystorePath)
-            if (debugKeystoreFile.exists()) {
-                storeFile debugKeystoreFile
-                storePassword 'android'
-                keyAlias 'androiddebugkey'
-                keyPassword 'android'
+            // Option 2: Set directly (not recommended - use for local testing only)
+            // keystorePath = keystorePath ?: "path/to/your/keystore.jks"
+            // keystorePassword = keystorePassword ?: "your_keystore_password"
+            // keyAlias = keyAlias ?: "your_key_alias"
+            // keyPassword = keyPassword ?: "your_key_password"
+            
+            // Fallback to debug keystore if production keystore not configured
+            // This allows local testing but should NOT be used for Play Store release
+            if (!keystorePath || !keystorePassword || !keyAlias || !keyPassword) {
+                println "WARNING: Production keystore not configured. Using debug keystore."
+                println "This is NOT suitable for Play Store release!"
+                println "Set RELEASE_KEYSTORE_* environment variables before building for production."
+                
+                def debugKeystorePath = "${System.getProperty('user.home')}/.android/debug.keystore"
+                def debugKeystoreFile = file(debugKeystorePath)
+                if (debugKeystoreFile.exists()) {
+                    storeFile debugKeystoreFile
+                    storePassword 'android'
+                    keyAlias 'androiddebugkey'
+                    keyPassword 'android'
+                }
+            } else {
+                storeFile file(keystorePath)
+                storePassword keystorePassword
+                keyAlias keyAlias
+                keyPassword keyPassword
             }
         }
     }
