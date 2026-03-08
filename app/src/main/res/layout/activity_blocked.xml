@@ -29,21 +29,36 @@
         android:lineSpacingMultiplier="1.4" android:textStyle="italic"
         android:layout_marginBottom="20dp"/>
 
-    <!-- Coin balance display -->
-    <TextView android:id="@+id/tvCoinBalance" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="🪙 0 coins"
-        android:textColor="#FFD700" android:textSize="16sp" android:textStyle="bold"
-        android:background="@drawable/bg_card" android:paddingHorizontal="16dp" 
-        android:paddingVertical="8dp" android:layout_marginBottom="24dp"/>
+    <!-- Coin and Tree balance display -->
+    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:layout_marginBottom="24dp">
+        
+        <TextView android:id="@+id/tvCoinBalance" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="🪙 0 coins"
+            android:textColor="#FFD700" android:textSize="16sp" android:textStyle="bold"
+            android:background="@drawable/bg_card" android:paddingHorizontal="16dp" 
+            android:paddingVertical="8dp" android:layout_marginEnd="12dp"/>
+        
+        <TextView android:id="@+id/tvTreeBalance" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="🌳 0 trees"
+            android:textColor="#66BB6A" android:textSize="16sp" android:textStyle="bold"
+            android:background="@drawable/bg_card" android:paddingHorizontal="16dp" 
+            android:paddingVertical="8dp"/>
+    </LinearLayout>
 
     <Button android:id="@+id/btnGoHome" android:layout_width="240dp" android:layout_height="52dp"
         android:text="← Go to Home Screen" android:textColor="#FFFFFF"
         android:textSize="15sp" android:textStyle="bold" android:backgroundTint="#7C6BFF"
         android:layout_marginBottom="12dp"/>
 
-    <Button android:id="@+id/btnUseCoins" android:layout_width="240dp" android:layout_height="52dp"
-        android:text="💰 Use 500 Coins to Break Focus" android:textColor="#FFFFFF"
-        android:textSize="14sp" android:textStyle="bold" android:backgroundTint="#FFB800"
+    <Button android:id="@+id/btnPlantTree" android:layout_width="240dp" android:layout_height="52dp"
+        android:text="🌱 Plant Tree (500 Coins)" android:textColor="#FFFFFF"
+        android:textSize="14sp" android:textStyle="bold" android:backgroundTint="#43A047"
+        android:layout_marginBottom="12dp"/>
+
+    <Button android:id="@+id/btnCutTree" android:layout_width="240dp" android:layout_height="52dp"
+        android:text="🪓 Cut Tree (Get Coins)" android:textColor="#FFFFFF"
+        android:textSize="14sp" android:textStyle="bold" android:backgroundTint="#D84315"
         android:layout_marginBottom="12dp"/>
 
     <Button android:id="@+id/btnEndSession" android:layout_width="240dp" android:layout_height="44dp"

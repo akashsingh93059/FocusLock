@@ -15,7 +15,9 @@ public class BlockedActivity extends Activity {
     private CountDownTimer refresher;
     private SessionManager sm;
     private TextView tvCoinBalance;
-    private Button btnUseCoins;
+    private TextView tvTreeBalance;
+    private Button btnPlantTree;
+    private Button btnCutTree;
 
     private static final String[] QUOTES = {
         "📚 Stay focused — your goals need you now!",
@@ -25,6 +27,7 @@ public class BlockedActivity extends Activity {
         "🌟 Close this. Go back to studying. You've got this.",
         "⚡ Your future self is watching. Don't let them down.",
         "🏆 One day or day one. You decide.",
+        "🌳 Plant a tree today. Your future self will thank you.",
     };
 
     @Override
@@ -63,10 +66,12 @@ public class BlockedActivity extends Activity {
                 "This app is blocked during your focus session.");
         }
 
-        // Setup coin UI
+        // Setup coin and tree UI
         tvCoinBalance = findViewById(R.id.tvCoinBalance);
-        btnUseCoins = findViewById(R.id.btnUseCoins);
-        updateCoinUI();
+        tvTreeBalance = findViewById(R.id.tvTreeBalance);
+        btnPlantTree = findViewById(R.id.btnPlantTree);
+        btnCutTree = findViewById(R.id.btnCutTree);
+        updateCoinAndTreeUI();
 
         // Countdown
         startRefresher(remainMs);
@@ -74,8 +79,11 @@ public class BlockedActivity extends Activity {
         // Go home
         findViewById(R.id.btnGoHome).setOnClickListener(v -> goHome());
 
-        // Use coins to break focus
-        btnUseCoins.setOnClickListener(v -> tryUseCoins());
+        // Plant tree
+        btnPlantTree.setOnClickListener(v -> plantTree());
+
+        // Cut tree
+        btnCutTree.setOnClickListener(v -> cutTree());
 
         // End session
         findViewById(R.id.btnEndSession).setOnClickListener(v -> {
@@ -88,44 +96,78 @@ public class BlockedActivity extends Activity {
         });
     }
 
-    private void updateCoinUI() {
+    private void updateCoinAndTreeUI() {
         int coins = sm.getCoins();
-        tvCoinBalance.setText("🪙 " + coins + " coin" + (coins == 1 ? "" : "s"));
+        int trees = sm.getTreesPlanted();
         
+        tvCoinBalance.setText("🪙 " + coins + " coin" + (coins == 1 ? "" : "s"));
+        tvTreeBalance.setText("🌳 " + trees + " tree" + (trees == 1 ? "" : "s"));
+        
+        // Enable/disable plant tree button based on coin balance
         if (coins >= 500) {
-            btnUseCoins.setEnabled(true);
-            btnUseCoins.setText("💰 Use 500 Coins to Break Focus");
+            btnPlantTree.setEnabled(true);
+            btnPlantTree.setText("🌱 Plant Tree (500 Coins)");
         } else {
-            btnUseCoins.setEnabled(false);
-            btnUseCoins.setText("💰 Need " + (500 - coins) + " more coins");
+            btnPlantTree.setEnabled(false);
+            btnPlantTree.setText("🌱 Need " + (500 - coins) + " more coins");
+        }
+        
+        // Enable/disable cut tree button based on tree count
+        if (trees > 0) {
+            btnCutTree.setEnabled(true);
+            btnCutTree.setText("🪓 Cut Tree (Get 500 Coins)");
+        } else {
+            btnCutTree.setEnabled(false);
+            btnCutTree.setText("🪓 No trees to cut");
         }
     }
 
-    private void tryUseCoins() {
+    private void plantTree() {
         int coins = sm.getCoins();
         if (coins < 500) {
-            Toast.makeText(this, "Not enough coins! You need 500 coins.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Not enough coins! You need 500 coins to plant a tree.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         new AlertDialog.Builder(this)
-            .setTitle("Use 500 Coins?")
-            .setMessage("This will spend 500 coins to unlock all apps and end your focus session immediately.\n\nAre you sure?")
-            .setPositiveButton("Yes, Use Coins", (d, w) -> {
-                if (sm.spendCoins(500)) {
-                    Toast.makeText(this, "✨ 500 coins spent! Focus unlocked.", Toast.LENGTH_SHORT).show();
-                    // End the session
-                    startService(new Intent(this, com.focuslock.service.AppMonitorService.class)
-                        .setAction(com.focuslock.service.AppMonitorService.ACTION_STOP));
-                    com.focuslock.model.FocusSession fs = sm.loadSession();
-                    fs.setActive(false);
-                    sm.saveSession(fs);
-                    goHome();
+            .setTitle("🌱 Plant a Virtual Tree?")
+            .setMessage("Spend 500 coins to plant a tree in your virtual forest.\n\nThis is an achievement of your focus dedication!\n\nPlant this tree?")
+            .setPositiveButton("Yes, Plant Tree! 🌳", (d, w) -> {
+                if (sm.plantTree()) {
+                    Toast.makeText(this, "🎉 Tree planted! You're growing your focus forest!", Toast.LENGTH_LONG).show();
+                    updateCoinAndTreeUI();
                 } else {
-                    Toast.makeText(this, "Failed to spend coins. Try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Failed to plant tree. Try again.", Toast.LENGTH_SHORT).show();
                 }
             })
             .setNegativeButton("Cancel", null)
+            .show();
+    }
+
+    private void cutTree() {
+        int trees = sm.getTreesPlanted();
+        if (trees <= 0) {
+            Toast.makeText(this, "No trees to cut!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+            .setTitle("🪓 Cut a Tree?")
+            .setMessage("⚠️ Warning: Cutting a tree will give you back 500 coins.\n\nBut remember - each tree represents your hard work and dedication. Cutting it down removes that achievement.\n\nAre you sure you want to cut a tree?")
+            .setPositiveButton("Yes, Cut Tree", (d, w) -> {
+                int coinsGained = sm.cutTree();
+                if (coinsGained > 0) {
+                    new AlertDialog.Builder(this)
+                        .setTitle("😔 Tree Cut Down")
+                        .setMessage("You gained " + coinsGained + " coins, but lost a tree from your forest.\n\nYour achievements represent real effort. Try to let your forest grow instead!")
+                        .setPositiveButton("I understand", null)
+                        .show();
+                    updateCoinAndTreeUI();
+                } else {
+                    Toast.makeText(this, "Failed to cut tree. Try again.", Toast.LENGTH_SHORT).show();
+                }
+            })
+            .setNegativeButton("No, Keep My Forest", null)
             .show();
     }
 

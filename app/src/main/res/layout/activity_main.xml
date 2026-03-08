@@ -10,6 +10,11 @@
         <TextView android:layout_width="0dp" android:layout_height="wrap_content"
             android:layout_weight="1" android:text="FocusLock" android:textSize="22sp"
             android:textStyle="bold" android:textColor="#7C6BFF"/>
+        <TextView android:id="@+id/tvTreeBadge" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="🌳 0"
+            android:textColor="#66BB6A" android:textSize="14sp" android:textStyle="bold"
+            android:background="#1E1E2E" android:paddingHorizontal="12dp" android:paddingVertical="6dp"
+            android:layout_marginEnd="8dp"/>
         <TextView android:id="@+id/tvCoinBadge" android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:text="🪙 0"
             android:textColor="#FFD700" android:textSize="14sp" android:textStyle="bold"
