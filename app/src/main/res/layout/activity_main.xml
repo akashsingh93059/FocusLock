@@ -104,7 +104,7 @@
 
                 <!-- Security -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="#16161F"
+                    android:orientation="vertical" android:background="@drawable/bg_card"
                     android:padding="16dp" android:layout_marginBottom="12dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="SECURITY" android:textColor="#5A5A78"
@@ -186,7 +186,7 @@
 
                 <!-- Time pickers -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="#16161F" android:padding="16dp"
+                    android:orientation="vertical" android:background="@drawable/bg_card" android:padding="16dp"
                     android:layout_marginBottom="12dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="BLOCK FROM" android:textColor="#5A5A78" android:textSize="11sp"
@@ -204,7 +204,7 @@
 
                 <!-- Days of week -->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:background="#16161F" android:padding="16dp"
+                    android:orientation="vertical" android:background="@drawable/bg_card" android:padding="16dp"
                     android:layout_marginBottom="12dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="ACTIVE DAYS" android:textColor="#5A5A78" android:textSize="11sp"
@@ -260,7 +260,7 @@
             <TextView android:id="@+id/tvBlockedCount" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:text="No apps selected yet"
                 android:textColor="#7C6BFF" android:textSize="14sp" android:textStyle="bold"
-                android:background="#16161F" android:padding="12dp" android:layout_marginBottom="12dp"/>
+                android:background="@drawable/bg_card" android:padding="12dp" android:layout_marginBottom="12dp"/>
             <Button android:id="@+id/btnPickApps" android:layout_width="match_parent"
                 android:layout_height="52dp" android:text="📵 Select apps to block"
                 android:textColor="#FFFFFF" android:textSize="15sp" android:textStyle="bold"
@@ -274,7 +274,7 @@
             <TextView android:id="@+id/tvQuickStats" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:text="No data yet"
                 android:textColor="#FFFFFF" android:textSize="16sp" android:lineSpacingMultiplier="1.8"
-                android:background="#16161F" android:padding="20dp" android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_card" android:padding="20dp" android:layout_marginBottom="16dp"
                 android:fontFamily="monospace"/>
             <Button android:id="@+id/btnViewStats" android:layout_width="match_parent"
                 android:layout_height="52dp" android:text="📊 View Full Stats &amp; Charts"
