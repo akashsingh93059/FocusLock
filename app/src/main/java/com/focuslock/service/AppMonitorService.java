@@ -73,6 +73,16 @@ public class AppMonitorService extends Service {
 
         if (s.isExpired()) { onExpired(s); return; }
 
+        // Check if in temporary break
+        if (sm.isInTemporaryBreak()) {
+            long breakMs = sm.getTemporaryBreakRemainingMs();
+            long min = breakMs / 60_000;
+            long sec = (breakMs % 60_000) / 1_000;
+            updateNotif("☕ Break time: " + 
+                String.format(Locale.getDefault(), "%02d:%02d remaining", min, sec));
+            return; // Don't block apps during break
+        }
+
         // Update notification with countdown
         long ms  = s.getRemainingMs();
         long min = ms / 60_000;

@@ -92,34 +92,30 @@ public class BlockedActivity extends Activity {
         int coins = sm.getCoins();
         tvCoinBalance.setText("🪙 " + coins + " coin" + (coins == 1 ? "" : "s"));
         
-        if (coins >= 500) {
+        if (coins >= 20) {
             btnUseCoins.setEnabled(true);
-            btnUseCoins.setText("💰 Use 500 Coins to Break Focus");
+            btnUseCoins.setText("💰 Use 20 Coins for 1-Min Break");
         } else {
             btnUseCoins.setEnabled(false);
-            btnUseCoins.setText("💰 Need " + (500 - coins) + " more coins");
+            btnUseCoins.setText("💰 Need " + (20 - coins) + " more coins");
         }
     }
 
     private void tryUseCoins() {
         int coins = sm.getCoins();
-        if (coins < 500) {
-            Toast.makeText(this, "Not enough coins! You need 500 coins.", Toast.LENGTH_SHORT).show();
+        if (coins < 20) {
+            Toast.makeText(this, "Not enough coins! You need 20 coins.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         new AlertDialog.Builder(this)
-            .setTitle("Use 500 Coins?")
-            .setMessage("This will spend 500 coins to unlock all apps and end your focus session immediately.\n\nAre you sure?")
+            .setTitle("Use 20 Coins?")
+            .setMessage("This will spend 20 coins to unlock all apps for 1 minute.\n\nAfter 1 minute, you'll return to focus mode.\n\nAre you sure?")
             .setPositiveButton("Yes, Use Coins", (d, w) -> {
-                if (sm.spendCoins(500)) {
-                    Toast.makeText(this, "✨ 500 coins spent! Focus unlocked.", Toast.LENGTH_SHORT).show();
-                    // End the session
-                    startService(new Intent(this, com.focuslock.service.AppMonitorService.class)
-                        .setAction(com.focuslock.service.AppMonitorService.ACTION_STOP));
-                    com.focuslock.model.FocusSession fs = sm.loadSession();
-                    fs.setActive(false);
-                    sm.saveSession(fs);
+                if (sm.spendCoins(20)) {
+                    Toast.makeText(this, "✨ 20 coins spent! Enjoy your 1-minute break.", Toast.LENGTH_LONG).show();
+                    // Start a 1-minute temporary break
+                    sm.startTemporaryBreak(1);
                     goHome();
                 } else {
                     Toast.makeText(this, "Failed to spend coins. Try again.", Toast.LENGTH_SHORT).show();

@@ -23,6 +23,7 @@ public class SessionManager {
     // Coin system keys
     private static final String KEY_COINS           = "coins";
     private static final String KEY_FOCUS_MINUTES_ACCUMULATED = "focus_minutes_accumulated";
+    private static final String KEY_TEMP_BREAK_END_TIME = "temp_break_end_time";
 
     private final SharedPreferences prefs;
     private final Gson gson = new Gson();
@@ -168,14 +169,14 @@ public class SessionManager {
 
     /**
      * Track accumulated focus minutes and award coins
-     * Every 45 minutes = 1 coin
+     * Every 1 minute = 1 coin
      * @param minutes Minutes to add
      * @return Number of coins earned from this addition
      */
     public int addFocusMinutesAndAwardCoins(int minutes) {
         int accumulated = prefs.getInt(KEY_FOCUS_MINUTES_ACCUMULATED, 0) + minutes;
-        int coinsToAward = accumulated / 45;  // 45 minutes = 1 coin
-        int remainingMinutes = accumulated % 45;
+        int coinsToAward = accumulated / 1;  // 1 minute = 1 coin
+        int remainingMinutes = accumulated % 1;
         
         if (coinsToAward > 0) {
             addCoins(coinsToAward);
@@ -190,6 +191,48 @@ public class SessionManager {
      */
     public int getAccumulatedMinutes() {
         return prefs.getInt(KEY_FOCUS_MINUTES_ACCUMULATED, 0);
+    }
+
+    /**
+     * Start a temporary break for the specified duration
+     * @param minutes Duration of the break in minutes
+     */
+    public void startTemporaryBreak(int minutes) {
+        long endTime = System.currentTimeMillis() + (minutes * 60_000L);
+        prefs.edit().putLong(KEY_TEMP_BREAK_END_TIME, endTime).apply();
+    }
+
+    /**
+     * Check if currently in a temporary break
+     * @return true if in a break, false otherwise
+     */
+    public boolean isInTemporaryBreak() {
+        long endTime = prefs.getLong(KEY_TEMP_BREAK_END_TIME, 0);
+        if (endTime == 0) return false;
+        if (System.currentTimeMillis() >= endTime) {
+            // Break has expired, clear it
+            prefs.edit().remove(KEY_TEMP_BREAK_END_TIME).apply();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Get remaining time in current temporary break
+     * @return remaining milliseconds, or 0 if not in a break
+     */
+    public long getTemporaryBreakRemainingMs() {
+        long endTime = prefs.getLong(KEY_TEMP_BREAK_END_TIME, 0);
+        if (endTime == 0) return 0;
+        long remaining = endTime - System.currentTimeMillis();
+        return Math.max(0, remaining);
+    }
+
+    /**
+     * Cancel the current temporary break
+     */
+    public void cancelTemporaryBreak() {
+        prefs.edit().remove(KEY_TEMP_BREAK_END_TIME).apply();
     }
     }
 }
