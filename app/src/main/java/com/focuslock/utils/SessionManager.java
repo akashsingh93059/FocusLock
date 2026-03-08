@@ -174,16 +174,12 @@ public class SessionManager {
      * @return Number of coins earned from this addition
      */
     public int addFocusMinutesAndAwardCoins(int minutes) {
-        int accumulated = prefs.getInt(KEY_FOCUS_MINUTES_ACCUMULATED, 0) + minutes;
-        int coinsToAward = accumulated / 1;  // 1 minute = 1 coin
-        int remainingMinutes = accumulated % 1;
-        
-        if (coinsToAward > 0) {
-            addCoins(coinsToAward);
+        // Award 1 coin per minute directly, no need to accumulate
+        if (minutes > 0) {
+            addCoins(minutes);
         }
         
-        prefs.edit().putInt(KEY_FOCUS_MINUTES_ACCUMULATED, remainingMinutes).apply();
-        return coinsToAward;
+        return minutes;
     }
 
     /**
