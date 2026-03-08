@@ -55,17 +55,32 @@ public class AppPickerActivity extends AppCompatActivity {
         PackageManager pm = getPackageManager();
         Set<String> distractions = new HashSet<>(Arrays.asList(AppInfo.DISTRACTION_PACKAGES));
 
-        List<ResolveInfo> ris = pm.queryIntentActivities(
-            new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER), 0);
-        ris.sort(Comparator.comparing(r -> r.loadLabel(pm).toString()));
-
-        for (ResolveInfo ri : ris) {
-            String pkg = ri.activityInfo.packageName;
+        // Get all installed applications instead of just launcher apps
+        List<ApplicationInfo> apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        
+        for (ApplicationInfo appInfo : apps) {
+            String pkg = appInfo.packageName;
+            // Skip our own app
             if ("com.focuslock".equals(pkg)) continue;
-            AppInfo ai = new AppInfo(ri.loadLabel(pm).toString(), pkg);
+            
+            // Skip pure system apps, but include updated system apps (like Chrome, Gmail)
+            if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                if ((appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0) {
+                    continue;
+                }
+            }
+            
+            // Get app name
+            CharSequence label = appInfo.loadLabel(pm);
+            String appName = label != null ? label.toString() : pkg;
+            
+            AppInfo ai = new AppInfo(appName, pkg);
             ai.setSelected(selected.contains(pkg));
             all.add(ai);
         }
+        
+        // Sort by app name
+        all.sort(Comparator.comparing(AppInfo::getAppName, String.CASE_INSENSITIVE_ORDER));
 
         // Sort: known distractions first
         all.sort((a, b) -> {
