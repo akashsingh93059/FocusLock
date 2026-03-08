@@ -20,6 +20,9 @@ public class SessionManager {
     private static final String KEY_DAYS_ACTIVE     = "stat_days_active";
     private static final String KEY_WEEK_DATA       = "stat_week";
     private static final String KEY_HISTORY         = "stat_history";   // JSON array of CompletedSession
+    // Coin system keys
+    private static final String KEY_COINS           = "coins";
+    private static final String KEY_FOCUS_MINUTES_ACCUMULATED = "focus_minutes_accumulated";
 
     private final SharedPreferences prefs;
     private final Gson gson = new Gson();
@@ -132,5 +135,61 @@ public class SessionManager {
             .remove(KEY_LAST_DAY).remove(KEY_DAYS_ACTIVE)
             .remove(KEY_WEEK_DATA).remove(KEY_HISTORY)
             .apply();
+    }
+
+    // ── Coin System ───────────────────────────────────────
+    /**
+     * Get current coin balance
+     */
+    public int getCoins() {
+        return prefs.getInt(KEY_COINS, 0);
+    }
+
+    /**
+     * Add coins to the balance
+     */
+    public void addCoins(int amount) {
+        int current = getCoins();
+        prefs.edit().putInt(KEY_COINS, current + amount).apply();
+    }
+
+    /**
+     * Spend coins if enough balance exists
+     * @return true if coins were spent, false if insufficient balance
+     */
+    public boolean spendCoins(int amount) {
+        int current = getCoins();
+        if (current >= amount) {
+            prefs.edit().putInt(KEY_COINS, current - amount).apply();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Track accumulated focus minutes and award coins
+     * Every 45 minutes = 1 coin
+     * @param minutes Minutes to add
+     * @return Number of coins earned from this addition
+     */
+    public int addFocusMinutesAndAwardCoins(int minutes) {
+        int accumulated = prefs.getInt(KEY_FOCUS_MINUTES_ACCUMULATED, 0) + minutes;
+        int coinsToAward = accumulated / 45;  // 45 minutes = 1 coin
+        int remainingMinutes = accumulated % 45;
+        
+        if (coinsToAward > 0) {
+            addCoins(coinsToAward);
+        }
+        
+        prefs.edit().putInt(KEY_FOCUS_MINUTES_ACCUMULATED, remainingMinutes).apply();
+        return coinsToAward;
+    }
+
+    /**
+     * Get accumulated minutes that haven't been converted to coins yet
+     */
+    public int getAccumulatedMinutes() {
+        return prefs.getInt(KEY_FOCUS_MINUTES_ACCUMULATED, 0);
+    }
     }
 }

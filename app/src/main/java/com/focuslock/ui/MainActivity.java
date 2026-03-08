@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private View pageTimer, pageSchedule, pageApps, pageStats;
 
     // Timer page
-    private TextView tvTimerClock, tvTimerStatus, tvStreakBadge;
+    private TextView tvTimerClock, tvTimerStatus, tvStreakBadge, tvCoinBadge;
     private SeekBar seekDuration;
     private TextView tvDurationVal;
     private Button btnStartStop;
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
         tvTimerClock  = findViewById(R.id.tvTimerClock);
         tvTimerStatus = findViewById(R.id.tvTimerStatus);
         tvStreakBadge = findViewById(R.id.tvStreakBadge);
+        tvCoinBadge   = findViewById(R.id.tvCoinBadge);
         seekDuration  = findViewById(R.id.seekDuration);
         tvDurationVal = findViewById(R.id.tvDurationVal);
         btnStartStop  = findViewById(R.id.btnStartStop);
@@ -250,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         tvStreakBadge.setText("🔥 " + sm.getStreak() + " day streak");
+        tvCoinBadge.setText("🪙 " + sm.getCoins());
     }
 
     // ── Schedule Page ─────────────────────────────────────
