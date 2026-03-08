@@ -27,11 +27,8 @@ android {
                 storePassword 'android'
                 keyAlias 'androiddebugkey'
                 keyPassword 'android'
-            } else {
-                // Mark that custom keystore is not available
-                // Android will use its default debug signing
-                ext.customKeystoreAvailable = false
             }
+            // Android will use its default debug signing if not configured above
         }
     }
 
