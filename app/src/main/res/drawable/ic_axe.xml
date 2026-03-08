@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <!-- Axe blade -->
+    <path android:fillColor="#546E7A"
+        android:pathData="M15,2L20,7L15,12L10,7z"/>
+    <!-- Axe handle -->
+    <path android:fillColor="#8B4513"
+        android:pathData="M9,8L8,9L4,21L6,22L10,10z"/>
+</vector>

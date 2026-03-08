@@ -23,6 +23,8 @@ public class SessionManager {
     // Coin system keys
     private static final String KEY_COINS           = "coins";
     private static final String KEY_FOCUS_MINUTES_ACCUMULATED = "focus_minutes_accumulated";
+    // Tree planting system keys
+    private static final String KEY_TREES_PLANTED   = "trees_planted";
 
     private final SharedPreferences prefs;
     private final Gson gson = new Gson();
@@ -190,5 +192,41 @@ public class SessionManager {
      */
     public int getAccumulatedMinutes() {
         return prefs.getInt(KEY_FOCUS_MINUTES_ACCUMULATED, 0);
+    }
+
+    // ── Tree Planting System ──────────────────────────────────
+    /**
+     * Get the number of trees planted
+     */
+    public int getTreesPlanted() {
+        return prefs.getInt(KEY_TREES_PLANTED, 0);
+    }
+
+    /**
+     * Plant a tree by spending 500 coins
+     * @return true if tree was planted, false if insufficient coins
+     */
+    public boolean plantTree() {
+        if (spendCoins(500)) {
+            int current = getTreesPlanted();
+            prefs.edit().putInt(KEY_TREES_PLANTED, current + 1).apply();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Cut a tree to get coins back
+     * @return the number of coins gained, or -1 if no trees to cut
+     */
+    public int cutTree() {
+        int current = getTreesPlanted();
+        if (current > 0) {
+            prefs.edit().putInt(KEY_TREES_PLANTED, current - 1).apply();
+            // Give back 500 coins when cutting a tree
+            addCoins(500);
+            return 500;
+        }
+        return -1;
     }
 }
