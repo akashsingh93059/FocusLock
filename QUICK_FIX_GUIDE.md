@@ -33,16 +33,14 @@ signingConfigs {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        // Android will use its default if keystore not configured
     }
 }
 
 buildTypes {
     debug {
         debuggable true
-        // Only apply if keystore exists
-        if (file("${System.getProperty('user.home')}/.android/debug.keystore").exists()) {
-            signingConfig signingConfigs.debug
-        }
+        signingConfig signingConfigs.debug
     }
 }
 ```

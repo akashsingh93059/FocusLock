@@ -40,17 +40,15 @@ signingConfigs {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        // Android will use its default debug signing if not configured
     }
 }
 
 buildTypes {
     debug {
         debuggable true
-        // Only apply custom signing config if keystore exists
-        def debugKeystorePath = "${System.getProperty('user.home')}/.android/debug.keystore"
-        if (file(debugKeystorePath).exists()) {
-            signingConfig signingConfigs.debug
-        }
+        // Apply signing config (uses default Android behavior if keystore not found)
+        signingConfig signingConfigs.debug
     }
 }
 ```
