@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#0A0A0F">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="16dp">
+
+        <!-- Stat grid -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="8dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                android:background="#16161F" android:padding="16dp" android:layout_marginEnd="6dp">
+                <TextView android:id="@+id/tvStatSessions" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="0" android:textColor="#7C6BFF"
+                    android:textSize="32sp" android:textStyle="bold" android:fontFamily="monospace"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Sessions" android:textColor="#5A5A78" android:textSize="12sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                android:background="#16161F" android:padding="16dp" android:layout_marginStart="6dp">
+                <TextView android:id="@+id/tvStatFocused" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="0m" android:textColor="#6BFFC8"
+                    android:textSize="32sp" android:textStyle="bold" android:fontFamily="monospace"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Focused" android:textColor="#5A5A78" android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="12dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                android:background="#16161F" android:padding="16dp" android:layout_marginEnd="6dp">
+                <TextView android:id="@+id/tvStatStreak" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="0 🔥" android:textColor="#FF6B9D"
+                    android:textSize="28sp" android:textStyle="bold"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Current streak" android:textColor="#5A5A78" android:textSize="12sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                android:background="#16161F" android:padding="16dp" android:layout_marginStart="6dp">
+                <TextView android:id="@+id/tvStatBest" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="0 days" android:textColor="#FFB347"
+                    android:textSize="24sp" android:textStyle="bold" android:fontFamily="monospace"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Best streak" android:textColor="#5A5A78" android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginBottom="12dp">
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                android:background="#16161F" android:padding="16dp" android:layout_marginEnd="6dp">
+                <TextView android:id="@+id/tvStatDays" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="0 days" android:textColor="#AA88FF"
+                    android:textSize="24sp" android:textStyle="bold" android:fontFamily="monospace"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Days active" android:textColor="#5A5A78" android:textSize="12sp"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                android:background="#16161F" android:padding="16dp" android:layout_marginStart="6dp">
+                <TextView android:id="@+id/tvStatToday" android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:text="0 min" android:textColor="#6BFFC8"
+                    android:textSize="24sp" android:textStyle="bold" android:fontFamily="monospace"/>
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="Today" android:textColor="#5A5A78" android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Week chart -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:background="#16161F" android:padding="16dp"
+            android:layout_marginBottom="12dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="THIS WEEK (minutes)" android:textColor="#5A5A78"
+                android:textSize="11sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <com.focuslock.ui.WeekChartView android:id="@+id/weekChart"
+                android:layout_width="match_parent" android:layout_height="120dp"/>
+        </LinearLayout>
+
+        <!-- Session history -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:background="#16161F" android:padding="16dp"
+            android:layout_marginBottom="12dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="SESSION HISTORY" android:textColor="#5A5A78"
+                android:textSize="11sp" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <LinearLayout android:id="@+id/llHistory" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:orientation="vertical"/>
+        </LinearLayout>
+
+        <Button android:id="@+id/btnResetStats" android:layout_width="match_parent"
+            android:layout_height="48dp" android:text="🗑  Reset All Stats"
+            android:textColor="#FF4D6D" android:textSize="14sp"
+            android:backgroundTint="#1A0A0F" android:layout_marginBottom="16dp"/>
+
+    </LinearLayout>
+</ScrollView>
