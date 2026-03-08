@@ -1,31 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Colors -->
+    <color name="purple_500">#7C6BFF</color>
+    <color name="purple_700">#5A4FCC</color>
+    <color name="pink_500">#FF6B9D</color>
+    <color name="bg_dark">#0A0A0F</color>
+    <color name="bg_surface">#111118</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Main app theme -->
     <style name="Theme.FocusLock" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">#7C6BFF</item>
-        <item name="colorPrimaryVariant">#5A4FCC</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
-        <item name="colorSecondary">#FF6B9D</item>
-        <item name="colorOnSecondary">#FFFFFF</item>
-        <item name="android:colorBackground">#0A0A0F</item>
-        <item name="android:windowBackground">#0A0A0F</item>
-        <item name="android:statusBarColor">#111118</item>
-        <item name="android:navigationBarColor">#0A0A0F</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/pink_500</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/bg_surface</item>
+        <item name="android:navigationBarColor">@color/bg_dark</item>
     </style>
+
+    <!-- Stats screen (has ActionBar) -->
     <style name="Theme.FocusLock.ActionBar" parent="Theme.MaterialComponents.DayNight">
-        <item name="windowActionBar">true</item>
-        <item name="windowNoTitle">false</item>
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/bg_surface</item>
+        <item name="android:navigationBarColor">@color/bg_dark</item>
         <item name="actionBarStyle">@style/FocusActionBar</item>
     </style>
+
     <style name="FocusActionBar" parent="Widget.AppCompat.ActionBar">
-        <item name="background">#111118</item>
+        <item name="background">@color/bg_surface</item>
         <item name="titleTextStyle">@style/FocusActionBarTitle</item>
     </style>
+
     <style name="FocusActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/white</item>
     </style>
+
+    <!-- Block screen theme -->
     <style name="Theme.FocusLock.Blocked" parent="Theme.FocusLock">
         <item name="android:windowIsTranslucent">false</item>
     </style>
-    <color name="purple_500">#7C6BFF</color>
-    <color name="purple_700">#5A4FCC</color>
+
 </resources>
