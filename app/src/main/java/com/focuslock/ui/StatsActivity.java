@@ -1,6 +1,7 @@
 package com.focuslock.ui;
 
 import android.graphics.*;
+import android.graphics.drawable.*;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.*;
