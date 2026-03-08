@@ -131,7 +131,12 @@ public class AppMonitorService extends Service {
     }
 
     private void onExpired(FocusSession s) {
-        sm.recordCompleted(s.getDurationMinutes(), "Focus session");
+        int minutes = s.getDurationMinutes();
+        sm.recordCompleted(minutes, "Focus session");
+        
+        // Award coins based on focus time (45 min = 1 coin)
+        int coinsEarned = sm.addFocusMinutesAndAwardCoins(minutes);
+        
         s.setActive(false);
         sm.saveSession(s);
         stopPoller();
@@ -140,11 +145,15 @@ public class AppMonitorService extends Service {
         Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
         if (v != null) v.vibrate(VibrationEffect.createWaveform(new long[]{0,300,200,300}, -1));
 
-        // Done notification
+        // Done notification with coin info
         NotificationManager nm = getSystemService(NotificationManager.class);
+        String contentText = "You focused for " + minutes + " minutes. Amazing work!";
+        if (coinsEarned > 0) {
+            contentText += " 🪙 +" + coinsEarned + " coin" + (coinsEarned == 1 ? "" : "s") + "!";
+        }
         Notification n = new NotificationCompat.Builder(this, CHANNEL_DONE)
             .setContentTitle("🎉 Focus session complete!")
-            .setContentText("You focused for " + s.getDurationMinutes() + " minutes. Amazing work!")
+            .setContentText(contentText)
             .setSmallIcon(R.drawable.ic_lock)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

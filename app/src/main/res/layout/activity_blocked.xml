@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical" android:gravity="center"
-    android:background="#0A0A0F" android:padding="32dp">
+    android:background="@drawable/bg_blocked" android:padding="32dp">
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="🔒" android:textSize="80sp" android:layout_marginBottom="20dp"/>
@@ -20,18 +20,30 @@
     <TextView android:id="@+id/tvModeInfo" android:layout_width="match_parent"
         android:layout_height="wrap_content" android:text="This app is blocked."
         android:textColor="#8888AA" android:textSize="14sp" android:gravity="center"
-        android:lineSpacingMultiplier="1.5" android:background="#16161F"
+        android:lineSpacingMultiplier="1.5" android:background="@drawable/bg_card"
         android:padding="16dp" android:layout_marginBottom="12dp"/>
 
     <TextView android:id="@+id/tvQuote" android:layout_width="match_parent"
         android:layout_height="wrap_content" android:text=""
         android:textColor="#6BFFC8" android:textSize="15sp" android:gravity="center"
         android:lineSpacingMultiplier="1.4" android:textStyle="italic"
-        android:layout_marginBottom="36dp"/>
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Coin balance display -->
+    <TextView android:id="@+id/tvCoinBalance" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="🪙 0 coins"
+        android:textColor="#FFD700" android:textSize="16sp" android:textStyle="bold"
+        android:background="@drawable/bg_card" android:paddingHorizontal="16dp" 
+        android:paddingVertical="8dp" android:layout_marginBottom="24dp"/>
 
     <Button android:id="@+id/btnGoHome" android:layout_width="240dp" android:layout_height="52dp"
         android:text="← Go to Home Screen" android:textColor="#FFFFFF"
         android:textSize="15sp" android:textStyle="bold" android:backgroundTint="#7C6BFF"
+        android:layout_marginBottom="12dp"/>
+
+    <Button android:id="@+id/btnUseCoins" android:layout_width="240dp" android:layout_height="52dp"
+        android:text="💰 Use 500 Coins to Break Focus" android:textColor="#FFFFFF"
+        android:textSize="14sp" android:textStyle="bold" android:backgroundTint="#FFB800"
         android:layout_marginBottom="12dp"/>
 
     <Button android:id="@+id/btnEndSession" android:layout_width="240dp" android:layout_height="44dp"

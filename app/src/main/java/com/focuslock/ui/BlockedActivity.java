@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.*;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.*;
 import com.focuslock.R;
@@ -13,6 +14,8 @@ import java.util.Locale;
 public class BlockedActivity extends Activity {
     private CountDownTimer refresher;
     private SessionManager sm;
+    private TextView tvCoinBalance;
+    private Button btnUseCoins;
 
     private static final String[] QUOTES = {
         "📚 Stay focused — your goals need you now!",
@@ -60,11 +63,19 @@ public class BlockedActivity extends Activity {
                 "This app is blocked during your focus session.");
         }
 
+        // Setup coin UI
+        tvCoinBalance = findViewById(R.id.tvCoinBalance);
+        btnUseCoins = findViewById(R.id.btnUseCoins);
+        updateCoinUI();
+
         // Countdown
         startRefresher(remainMs);
 
         // Go home
         findViewById(R.id.btnGoHome).setOnClickListener(v -> goHome());
+
+        // Use coins to break focus
+        btnUseCoins.setOnClickListener(v -> tryUseCoins());
 
         // End session
         findViewById(R.id.btnEndSession).setOnClickListener(v -> {
@@ -75,6 +86,47 @@ public class BlockedActivity extends Activity {
                 confirmEnd();
             }
         });
+    }
+
+    private void updateCoinUI() {
+        int coins = sm.getCoins();
+        tvCoinBalance.setText("🪙 " + coins + " coin" + (coins == 1 ? "" : "s"));
+        
+        if (coins >= 500) {
+            btnUseCoins.setEnabled(true);
+            btnUseCoins.setText("💰 Use 500 Coins to Break Focus");
+        } else {
+            btnUseCoins.setEnabled(false);
+            btnUseCoins.setText("💰 Need " + (500 - coins) + " more coins");
+        }
+    }
+
+    private void tryUseCoins() {
+        int coins = sm.getCoins();
+        if (coins < 500) {
+            Toast.makeText(this, "Not enough coins! You need 500 coins.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+            .setTitle("Use 500 Coins?")
+            .setMessage("This will spend 500 coins to unlock all apps and end your focus session immediately.\n\nAre you sure?")
+            .setPositiveButton("Yes, Use Coins", (d, w) -> {
+                if (sm.spendCoins(500)) {
+                    Toast.makeText(this, "✨ 500 coins spent! Focus unlocked.", Toast.LENGTH_SHORT).show();
+                    // End the session
+                    startService(new Intent(this, com.focuslock.service.AppMonitorService.class)
+                        .setAction(com.focuslock.service.AppMonitorService.ACTION_STOP));
+                    com.focuslock.model.FocusSession fs = sm.loadSession();
+                    fs.setActive(false);
+                    sm.saveSession(fs);
+                    goHome();
+                } else {
+                    Toast.makeText(this, "Failed to spend coins. Try again.", Toast.LENGTH_SHORT).show();
+                }
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
     }
 
     private void startRefresher(long initMs) {
