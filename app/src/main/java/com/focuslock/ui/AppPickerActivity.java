@@ -60,12 +60,11 @@ public class AppPickerActivity extends AppCompatActivity {
         
         for (ApplicationInfo appInfo : apps) {
             String pkg = appInfo.packageName;
-            // Skip system package and our own app
+            // Skip our own app
             if ("com.focuslock".equals(pkg)) continue;
             
-            // Skip system apps (optional - only show user-installed apps)
+            // Skip pure system apps, but include updated system apps (like Chrome, Gmail)
             if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
-                // Check if it's an updated system app (like Chrome, Gmail)
                 if ((appInfo.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0) {
                     continue;
                 }
