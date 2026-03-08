@@ -191,5 +191,4 @@ public class SessionManager {
     public int getAccumulatedMinutes() {
         return prefs.getInt(KEY_FOCUS_MINUTES_ACCUMULATED, 0);
     }
-    }
 }
