@@ -34,7 +34,11 @@ android {
     buildTypes {
         debug {
             debuggable true
-            signingConfig signingConfigs.debug
+            // Only apply custom signing config if keystore exists
+            def debugKeystorePath = "${System.getProperty('user.home')}/.android/debug.keystore"
+            if (file(debugKeystorePath).exists()) {
+                signingConfig signingConfigs.debug
+            }
         }
         release {
             minifyEnabled false

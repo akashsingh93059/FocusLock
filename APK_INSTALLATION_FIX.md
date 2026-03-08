@@ -24,24 +24,41 @@ versionName "1.0.1"
 ### 2. Signing Configuration Issue ✅ FIXED
 **Problem**: Missing or inconsistent signing configuration can cause installation failures, especially when trying to update an existing installation.
 
-**Solution**: Added explicit debug signing configuration using Android's default debug keystore:
+**Solution**: Added explicit debug signing configuration with CI/CD compatibility:
 ```gradle
 signingConfigs {
     debug {
-        storeFile file("${System.getProperty('user.home')}/.android/debug.keystore")
-        storePassword 'android'
-        keyAlias 'androiddebugkey'
-        keyPassword 'android'
+        // Use default debug keystore
+        // First try the default location, which works in most development environments
+        def debugKeystorePath = "${System.getProperty('user.home')}/.android/debug.keystore"
+        def debugKeystoreFile = file(debugKeystorePath)
+        
+        // Only configure if the keystore exists, otherwise use Android's default
+        if (debugKeystoreFile.exists()) {
+            storeFile debugKeystoreFile
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
     }
 }
 
 buildTypes {
     debug {
         debuggable true
-        signingConfig signingConfigs.debug
+        // Only apply custom signing config if keystore exists
+        def debugKeystorePath = "${System.getProperty('user.home')}/.android/debug.keystore"
+        if (file(debugKeystorePath).exists()) {
+            signingConfig signingConfigs.debug
+        }
     }
 }
 ```
+
+**Benefits**:
+- Ensures consistent APK signatures across builds
+- Falls back gracefully if keystore doesn't exist (CI/CD friendly)
+- Prevents "signature verification failed" errors
 
 ### 3. Packaging Options ✅ FIXED
 **Problem**: Duplicate resource files can cause APK build/installation failures.

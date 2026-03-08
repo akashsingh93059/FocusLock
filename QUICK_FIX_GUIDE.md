@@ -23,10 +23,26 @@ versionName "1.0.1"  // Was: 1.0
 ```gradle
 signingConfigs {
     debug {
-        storeFile file("${System.getProperty('user.home')}/.android/debug.keystore")
-        storePassword 'android'
-        keyAlias 'androiddebugkey'
-        keyPassword 'android'
+        // Use default debug keystore with existence check for CI/CD compatibility
+        def debugKeystorePath = "${System.getProperty('user.home')}/.android/debug.keystore"
+        def debugKeystoreFile = file(debugKeystorePath)
+        
+        if (debugKeystoreFile.exists()) {
+            storeFile debugKeystoreFile
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+}
+
+buildTypes {
+    debug {
+        debuggable true
+        // Only apply if keystore exists
+        if (file("${System.getProperty('user.home')}/.android/debug.keystore").exists()) {
+            signingConfig signingConfigs.debug
+        }
     }
 }
 ```
